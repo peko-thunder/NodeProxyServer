@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Proxy Server</title>
+</head>
+<body>
+    <h1>Node.js Proxy</h1>
+    <div>
+        <h2>Form</h2>
+        <div>
+            <input id="test" type="text">
+        </div>
+        <div>
+            <button id="submit">Submit</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById("submit").addEventListener("click", () => {
+            const json = {
+                "test" : document.getElementById("test").value,
+            };
+            fetch('http://localhost:3999/api/', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify(json),
+            }).then(response => {
+                return response.json();
+            }).then(res => {
+                console.log(res);
+            }).catch(error => {
+                console.log(error);
+            });
+        });
+    </script>
+</body>
+</html>

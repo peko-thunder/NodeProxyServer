@@ -1,0 +1,16 @@
+.wrap {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+label {
+    min-width: 100px;
+}
+
+input, textarea {
+    flex: 1;
+}
+
+textarea {
+    height: 200px;
+}

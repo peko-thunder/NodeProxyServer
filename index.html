@@ -5,34 +5,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Node.js Proxy Server</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h1>Node.js Proxy</h1>
-    <div>
-        <h2>Form</h2>
-        <div>
-            <input id="test" type="text">
-        </div>
-        <div>
-            <button id="submit">Submit</button>
-        </div>
-    </div>
+    <main>
+        <h1>Node.js Proxy Server</h1>
+        <form id="test">
+            <h2>Form</h2>
+            <div class="wrap">
+                <label for="endpoint">Endpoint</label>
+                <input name="endpoint" id="endpoint" type="text" value="https://jsonplaceholder.typicode.com/posts">
+            </div>
+            <div class="wrap">
+                <label for="method">Method</label>
+                <select name="method" id="method">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                </select>
+            </div>
+            <div class="wrap">
+                <label for="body">Body</label>
+                <textarea name="body" id="body"></textarea>
+            </div>
+            <div class="wrap">
+                <button id="submit">Submit</button>
+            </div>
+        </form>
+    </main>
+
     <script>
-        document.getElementById("submit").addEventListener("click", () => {
-            const json = {
-                "test" : document.getElementById("test").value,
-            };
-            fetch('http://localhost:3999/api/', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(json),
-            }).then(response => {
+        document.getElementById("body").textContent = `{\n    "Name": "Taro",\n    "Age": 20\n}`;
+        document.getElementById("submit").addEventListener("click", (e) => {
+            e.preventDefault();
+            const elements = document.forms["test"].elements;
+            fetch("http://localhost:3999/api/", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                    "endpoint": elements.endpoint.value,
+                    "method": elements.method.value,
+                    "body": JSON.parse(elements.body.value),
+                }),
+            })
+            .then(response => {
                 return response.json();
-            }).then(res => {
+            })
+            .then(res => {
                 console.log(res);
-            }).catch(error => {
+            })
+            .catch(error => {
                 console.log(error);
             });
         });

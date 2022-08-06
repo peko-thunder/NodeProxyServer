@@ -3,8 +3,6 @@
  ************************/
 const host = "localhost";
 const port = 3999;
-const method = "POST";
-const endpoint = "https://jsonplaceholder.typicode.com/posts";
 
 /************************
  * INIT
@@ -25,26 +23,33 @@ app.use(cors());
  * REQUEST
  ************************/
 app.post('/api/', (req, res) => {
-    console.log("========== Request:Start ==========");
-    console.log(req.body);
-    console.log("========== Request:End ==========");
-    let option = {
-        method: method,
+    const data = req.body;
+    console.log("========== Request ==========");
+    console.log(`endpoint: ${data.endpoint}`);
+    console.log(`method: ${data.method}`);
+    console.log(`body: ${JSON.stringify(data.body)}`);
+    const option = {
+        method: data.method,
         headers: {},
     };
-    if(method === "POST") {
+    if(data.method === "POST") {
         option.headers["Content-Type"] = "application/json";
-        option.body = JSON.stringify(req.body);
+        option.body = JSON.stringify(data.body);
     }
-    return fetch(endpoint, option)
-    .then(function(response) {
+    return fetch(data.endpoint, option)
+    .then(response => {
+        console.log("========== Response ==========");
+        console.log(`url: ${response.url}`);
+        console.log(`status: ${response.status}`);
+        console.log(`statusText: ${response.statusText}`);
         return response.json();
-    }).then(function(json) {
-        console.log("========== Response:Start ==========");
+    })
+    .then(json => {
+        console.log("========== JSON ==========");
         console.log(json);
-        console.log("========== Response:End ==========");
         res.json(json);
-    });
+    })
+    .catch(error => console.log(`error: ${error}`));
 });
 
 /************************
